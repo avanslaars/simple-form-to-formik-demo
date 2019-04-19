@@ -83,36 +83,6 @@ function CustomerForm({ onCreate }) {
       )}
     </Formik>
   )
-  // return (
-  //   <form onSubmit={handleSubmit} onReset={handleCancel}>
-  //     <div>
-  //       <label htmlFor="firstName">
-  //         First Name:
-  //         <input
-  //           type="text"
-  //           name="firstName"
-  //           value={firstName}
-  //           onChange={handleFirstNameChange}
-  //         />
-  //       </label>
-  //     </div>
-  //     <div>
-  //       <label htmlFor="lastName">
-  //         Last Name:
-  //         <input
-  //           type="text"
-  //           name="lastName"
-  //           value={lastName}
-  //           onChange={handleLastNameChange}
-  //         />
-  //       </label>
-  //     </div>
-  //     <div>
-  //       <button type="reset">Cancel</button>
-  //       <button type="submit">Add Customer</button>
-  //     </div>
-  //   </form>
-  // )
 }
 
 function Customer({ firstName, lastName }) {
