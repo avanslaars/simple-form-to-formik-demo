@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import uuid from 'uuid/v4'
+import { Formik, Form, Field } from 'formik'
+import { string, object } from 'yup'
 
 import './styles.css'
+
+const customerSchema = object().shape({
+  firstName: string().required('First name is required'),
+  lastName: string().required('Last name is required'),
+})
 
 let customers = []
 
@@ -37,59 +44,75 @@ export default function App() {
 }
 
 function CustomerForm({ onCreate }) {
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-
-  function handleFirstNameChange(event) {
-    const { value } = event.target
-    setFirstName(value)
-  }
-
-  function handleLastNameChange(event) {
-    const { value } = event.target
-    setLastName(value)
-  }
-
-  function handleSubmit(event) {
-    event.preventDefault()
+  function handleSubmit({ firstName, lastName }, { resetForm }) {
     onCreate({ firstName, lastName })
-  }
-
-  function handleCancel() {
-    setFirstName('')
-    setLastName('')
+    resetForm()
   }
 
   return (
-    <form onSubmit={handleSubmit} onReset={handleCancel}>
-      <div>
-        <label htmlFor="firstName">
-          First Name:
-          <input
-            type="text"
-            name="firstName"
-            value={firstName}
-            onChange={handleFirstNameChange}
-          />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="lastName">
-          Last Name:
-          <input
-            type="text"
-            name="lastName"
-            value={lastName}
-            onChange={handleLastNameChange}
-          />
-        </label>
-      </div>
-      <div>
-        <button type="reset">Cancel</button>
-        <button type="submit">Add Customer</button>
-      </div>
-    </form>
+    <Formik
+      initialValues={{ firstName: '', lastName: '' }}
+      onSubmit={handleSubmit}
+      validationSchema={customerSchema}
+    >
+      {({ errors, touched }) => (
+        <Form>
+          <div>
+            <label htmlFor="firstName">
+              First Name:
+              <Field name="firstName" />
+            </label>
+            {touched && errors.firstName && (
+              <div className="feedback">{errors.firstName}</div>
+            )}
+          </div>
+          <div>
+            <label htmlFor="lastName">
+              Last Name:
+              <Field name="lastName" />
+            </label>
+            {touched && errors.lastName && (
+              <div className="feedback">{errors.lastName}</div>
+            )}
+          </div>
+          <div>
+            <button type="reset">Cancel</button>
+            <button type="submit">Add Customer</button>
+          </div>
+        </Form>
+      )}
+    </Formik>
   )
+  // return (
+  //   <form onSubmit={handleSubmit} onReset={handleCancel}>
+  //     <div>
+  //       <label htmlFor="firstName">
+  //         First Name:
+  //         <input
+  //           type="text"
+  //           name="firstName"
+  //           value={firstName}
+  //           onChange={handleFirstNameChange}
+  //         />
+  //       </label>
+  //     </div>
+  //     <div>
+  //       <label htmlFor="lastName">
+  //         Last Name:
+  //         <input
+  //           type="text"
+  //           name="lastName"
+  //           value={lastName}
+  //           onChange={handleLastNameChange}
+  //         />
+  //       </label>
+  //     </div>
+  //     <div>
+  //       <button type="reset">Cancel</button>
+  //       <button type="submit">Add Customer</button>
+  //     </div>
+  //   </form>
+  // )
 }
 
 function Customer({ firstName, lastName }) {
